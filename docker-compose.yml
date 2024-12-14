@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_HOST: ${DB_HOST}
+      DATABASE_PORT: ${DB_PORT}
+      DATABASE_USER: ${DB_USER}
+      DATABASE_PASSWORD: ${DB_PASSWORD}
+      DATABASE_NAME: ${DB_NAME}
+      JWT_SECRET: ${JWT_SECRET}
+    volumes:
+      - .env:/app/.env  # Aseguramos que .env esté disponible en el contenedor
+    command: [
+      "sh", "-c",
+      "while ! nc -z ${DB_HOST} ${DB_PORT}; do sleep 1; done; deno run --allow-net --allow-read --allow-env app.ts"
+    ]
+
+volumes:
+  postgres_data:
