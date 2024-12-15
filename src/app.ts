@@ -5,29 +5,49 @@ import authRoutes from "./routes/auth.routes.ts";
 
 export const app = new Application();
 
-// Global middleware
+/**
+ * Global error handling middleware
+ */
 app.use(async (ctx, next) => {
   try {
     await next();
   } catch (err) {
-    console.error(err);
+    console.error(`[${new Date().toISOString()}] Error:`, err);
     ctx.response.status = 500;
-    ctx.response.body = { success: false, message: "Internal Server Error" };
+    ctx.response.body = {
+      success: false,
+      message: "Internal Server Error",
+    };
   }
 });
 
-// Logger middleware
+/**
+ * Logger middleware
+ */
 app.use(async (ctx, next) => {
-  console.log(`${ctx.request.method} ${ctx.request.url}`);
+  const start = performance.now();
+  console.log(
+    `[${new Date().toISOString()}] ${ctx.request.method} ${ctx.request.url}`,
+  );
   await next();
+  const ms = performance.now() - start;
+  console.log(
+    `[${new Date().toISOString()}] ${ctx.request.method} ${ctx.request.url} - ${
+      ms.toFixed(2)
+    }ms`,
+  );
 });
 
-// Connect to the database
+/**
+ * Connect to the database
+ */
 await connectDB();
 
-// Routes
-app.use(courseRoutes.routes());
-app.use(courseRoutes.allowedMethods());
-
-app.use(authRoutes.routes());
-app.use(authRoutes.allowedMethods());
+/**
+ * Register routes
+ */
+const routes = [courseRoutes, authRoutes];
+routes.forEach((route) => {
+  app.use(route.routes());
+  app.use(route.allowedMethods());
+});
