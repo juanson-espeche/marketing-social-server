@@ -1,0 +1,18 @@
+{
+    "tasks": {
+      "start": "deno run --allow-net --allow-env src/main.ts",
+      "test": "deno test --allow-net --allow-env tests/"
+    },
+    "importMap": "./import_map.json",
+    "fmt": {
+      "options": {
+        "indentWidth": 2,
+        "singleQuote": true
+      }
+    },
+    "lint": {
+      "rules": {
+        "ban-untested-ignore": "off"
+      }
+    }
+  }

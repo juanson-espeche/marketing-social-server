@@ -3,7 +3,7 @@ import { connectDB } from "./database/config.ts";
 import courseRoutes from "./routes/courses.ts";
 import authRoutes from "./routes/auth.ts";
 
-const app = new Application();
+export const app = new Application();
 
 // Global middleware
 app.use(async (ctx, next) => {
@@ -31,8 +31,3 @@ app.use(courseRoutes.allowedMethods());
 
 app.use(authRoutes.routes());
 app.use(authRoutes.allowedMethods());
-
-// Start server
-const PORT = Deno.env.get("PORT") ? Number(Deno.env.get("PORT")) : 8000;
-console.log(`Server running on http://localhost:${PORT}`);
-await app.listen({ port: PORT });
