@@ -1,5 +1,5 @@
 import { Application } from "./deps.ts";
-import { connectDB } from "./database/config.ts";
+import { connectDB } from "./config/database.ts";
 import courseRoutes from "./routes/courses.ts";
 import authRoutes from "./routes/auth.ts";
 

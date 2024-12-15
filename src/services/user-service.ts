@@ -1,4 +1,4 @@
-import { db } from "../database/config.ts";
+import { db } from "../config/database.ts";
 import { hashPassword } from "../utils/hash.ts";
 
 export const registerUser = async (name: string, email: string, password: string) => {
