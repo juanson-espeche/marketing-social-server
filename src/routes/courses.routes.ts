@@ -1,6 +1,6 @@
 import { Router } from "../deps.ts";
-import { getAllCourses, createCourse } from "../services/course-service.ts";
-import { sendResponse } from "../utils/response.ts";
+import { getAllCourses, createCourse } from "../services/course.service.ts";
+import { sendResponse } from "../utils/response.utils.ts";
 
 const router = new Router();
 

@@ -1,4 +1,4 @@
-import { db } from "../config/database.ts";
+import { db } from "../config/database.config.ts";
 
 export const getAllCourses = async () => {
   const result = await db.queryObject<{

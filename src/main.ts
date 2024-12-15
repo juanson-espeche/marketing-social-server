@@ -1,6 +1,6 @@
 import { app } from "./app.ts";
 
-const PORT = Deno.env.get("PORT") || 3000;
+const PORT = Number(Deno.env.get("PORT")) || 8000;
 
-app.listen({ port: +PORT });
 console.log(`Server running on http://localhost:${PORT}`);
+await app.listen({ port: PORT });

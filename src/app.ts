@@ -1,7 +1,7 @@
 import { Application } from "./deps.ts";
-import { connectDB } from "./config/database.ts";
-import courseRoutes from "./routes/courses.ts";
-import authRoutes from "./routes/auth.ts";
+import { connectDB } from "./config/database.config.ts";
+import courseRoutes from "./routes/courses.routes.ts";
+import authRoutes from "./routes/auth.routes.ts";
 
 export const app = new Application();
 

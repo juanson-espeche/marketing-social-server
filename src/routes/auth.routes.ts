@@ -1,8 +1,8 @@
 import { Router } from "../deps.ts";
-import { createToken } from "../utils/jwt.ts";
+import { createToken } from "../utils/jwt.utils.ts";
 import { compare } from "../deps.ts";
-import { db } from "../config/database.ts";
-import { AuthCredentials } from "../interfaces/auth-interfaces.ts";
+import { db } from "../config/database.config.ts";
+import { AuthCredentials } from "../interfaces/auth.interfaces.ts";
 
 const router = new Router();
 

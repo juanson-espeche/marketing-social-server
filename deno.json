@@ -1,18 +1,14 @@
 {
-    "tasks": {
-      "start": "deno run --allow-net --allow-env src/main.ts",
-      "test": "deno test --allow-net --allow-env tests/"
-    },
-    "importMap": "./import_map.json",
-    "fmt": {
-      "options": {
-        "indentWidth": 2,
-        "singleQuote": true
-      }
-    },
-    "lint": {
-      "rules": {
-        "ban-untested-ignore": "off"
-      }
+  "tasks": {
+    "start": "deno run --allow-env --allow-net src/main.ts",
+    "test": "deno test --allow-net --allow-env --allow-read"
+  },
+  "importMap": "./import_map.json",
+  "fmt": {
+    "options": {
+      "useTabs": false,
+      "lineWidth": 80,
+      "indentWidth": 2
     }
   }
+}

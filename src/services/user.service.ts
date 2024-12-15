@@ -1,5 +1,5 @@
-import { db } from "../config/database.ts";
-import { hashPassword } from "../utils/hash.ts";
+import { db } from "../config/database.config.ts";
+import { hashPassword } from "../utils/hash.utils.ts";
 
 export const registerUser = async (name: string, email: string, password: string) => {
   const hashedPassword = await hashPassword(password);
