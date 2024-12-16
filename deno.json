@@ -1,18 +1,30 @@
 {
-  "tasks": {
+  "run": {
     "start": "deno run --allow-env --allow-net src/main.ts",
-    "test": "deno test --allow-net --allow-env --allow-read"
+    "dev": "deno run --allow-env --allow-net --watch src/main.ts",
+    "test": "deno test --allow-net --allow-env --allow-read --coverage=coverage/",
+    "fmt": "deno fmt --check",
+    "lint": "deno lint"
   },
   "fmt": {
     "options": {
       "useTabs": false,
       "lineWidth": 80,
-      "indentWidth": 2
+      "indentWidth": 2,
+      "singleQuote": true,
+      "semiColons": false
     }
   },
   "lint": {
     "rules": {
-      "tags": ["recommended"]
+      "tags": [
+        "recommended"
+      ]
     }
+  },
+  "coverage": {
+    "ignore": [
+      "deps.ts"
+    ]
   }
 }
