@@ -1,20 +1,14 @@
-# Base image
 FROM denoland/deno:latest
 
-# Set working directory
 WORKDIR /app
 
-# Install netcat (nc) with the correct package
 RUN apt-get update && apt-get install -y netcat-openbsd
 
-# Copy all files
-COPY . .
+COPY src ./src
+COPY src/deps.ts ./src/deps.ts
 
-# Cache dependencies
-RUN deno cache deps.ts
+RUN deno cache src/deps.ts
 
-# Expose port
 EXPOSE 8000
 
-# Command to run the application with read permission
-CMD ["deno", "run", "--allow-net", "--allow-read", "--allow-env", "app.ts"]
+CMD ["deno", "run", "--allow-net", "--allow-read", "--allow-env", "src/main.ts"]

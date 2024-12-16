@@ -1,66 +1,63 @@
-// src/config/database.ts
 import { Client } from "../deps.ts";
+import { ENV } from "./env.config.ts";
 
-// Helper function to retrieve environment variables with validation
-const getEnvVar = (key: string): string => {
-  const value = Deno.env.get(key);
-  if (!value) {
-    throw new Error(`Missing environment variable: ${key}`);
-  }
-  return value;
-};
-
-// Database configuration
-export const db: Client = new Client({
-  user: getEnvVar("DB_USER"),
-  password: getEnvVar("DB_PASSWORD"),
-  database: getEnvVar("DB_NAME"),
-  hostname: getEnvVar("DB_HOST"),
-  port: Number(Deno.env.get("DB_PORT")) || 5432,
-});
-
-// Singleton pattern for database client
 let clientInstance: Client | null = null;
 
-export const getDBClient = (): Client => {
+/**
+ * Create and initialize the database client.
+ */
+const createDBClient = (): Client => {
+  return new Client({
+    user: ENV.DB_USER,
+    password: ENV.DB_PASSWORD,
+    database: ENV.DB_NAME,
+    hostname: ENV.DB_HOST,
+    port: ENV.DB_PORT,
+  });
+};
+
+/**
+ * Connect to the database.
+ */
+export const connectDB = async (): Promise<Client> => {
   if (!clientInstance) {
-    clientInstance = new Client({
-      user: getEnvVar("DB_USER"),
-      password: getEnvVar("DB_PASSWORD"),
-      database: getEnvVar("DB_NAME"),
-      hostname: getEnvVar("DB_HOST"),
-      port: Number(Deno.env.get("DB_PORT")) || 5432,
-    });
+    try {
+      clientInstance = createDBClient();
+      await clientInstance.connect();
+      console.log("Database connected successfully.");
+    } catch (error) {
+      throw new Error(
+        "Database connection failed: " +
+          (error instanceof Error ? error.message : error),
+      );
+    }
   }
   return clientInstance;
 };
 
-// Connect to the database
-export const connectDB = async (): Promise<void> => {
-  const dbClient: Client = getDBClient();
-  try {
-    await dbClient.connect();
-    console.log("Database connected successfully");
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      throw new Error("Database connection failed: " + error.message);
-    } else {
-      throw new Error("Unknown error occurred during database connection.");
+/**
+ * Disconnect from the database.
+ */
+export const disconnectDB = async (): Promise<void> => {
+  if (clientInstance) {
+    try {
+      await clientInstance.end();
+      clientInstance = null;
+      console.log("Database connection closed successfully.");
+    } catch (error) {
+      console.error("Error while closing the database connection:", error);
     }
   }
 };
 
-// Close database connection
-export const disconnectDB = async (): Promise<void> => {
-  const dbClient: Client = getDBClient();
-  try {
-    await dbClient.end();
-    console.log("Database connection closed successfully");
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error("Error closing database connection:", error.message);
-    } else {
-      console.error("Unknown error occurred while closing the database connection.");
-    }
+/**
+ * Get the active database client instance.
+ */
+export const getDBClient = (): Client => {
+  if (!clientInstance) {
+    throw new Error(
+      "Database client is not connected. Did you forget to call connectDB?",
+    );
   }
+  return clientInstance;
 };

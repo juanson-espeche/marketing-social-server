@@ -1,16 +1,15 @@
-export const getEnvVar = (key: string): string => {
-    const value = Deno.env.get(key);
-    if (!value) {
-      throw new Error(`Missing environment variable: ${key}`);
-    }
-    return value;
-  };
-  
-  export const ENV = {
-    DB_USER: getEnvVar("DB_USER"),
-    DB_PASSWORD: getEnvVar("DB_PASSWORD"),
-    DB_NAME: getEnvVar("DB_NAME"),
-    DB_HOST: getEnvVar("DB_HOST"),
-    DB_PORT: Number(getEnvVar("DB_PORT")),
-    JWT_SECRET: getEnvVar("JWT_SECRET"),
-  };
+import { AppEnvironments, Environment } from "../interfaces/env.interfaces.ts";
+import { loadEnvVar } from "../utils/env.utils.ts";
+
+const ENV: Environment = {
+  APP_ENV: loadEnvVar<AppEnvironments>("APP_ENV", "environment"),
+  APP_PORT: loadEnvVar<number>("APP_PORT", "number"),
+  DB_USER: loadEnvVar<string>("DB_USER", "string"),
+  DB_PASSWORD: loadEnvVar<string>("DB_PASSWORD", "string"),
+  DB_NAME: loadEnvVar<string>("DB_NAME", "string"),
+  DB_HOST: loadEnvVar<string>("DB_HOST", "string"),
+  DB_PORT: loadEnvVar<number>("DB_PORT", "number"),
+  JWT_SECRET: loadEnvVar<string>("JWT_SECRET", "string"),
+};
+
+export { ENV };

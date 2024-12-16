@@ -1,7 +1,7 @@
-import { create, verify, decode, config } from "../deps.ts";
+import { ENV } from "../config/env.config.ts";
+import { create, decode, verify } from "../deps.ts";
 
-const env = await config();
-const keyString = env.JWT_SECRET;
+const keyString = ENV.JWT_SECRET;
 
 if (!keyString) {
   throw new Error("JWT_SECRET is not defined in the .env file");
@@ -14,7 +14,7 @@ const cryptoKey = await crypto.subtle.importKey(
   encoder.encode(keyString),
   { name: "HMAC", hash: "SHA-256" },
   false,
-  ["sign", "verify"]
+  ["sign", "verify"],
 );
 
 export const createToken = async (payload: Record<string, unknown>) => {
